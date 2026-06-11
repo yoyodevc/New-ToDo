@@ -1,0 +1,255 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap');
+
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+/* ─── Design Tokens ─────────────────────────────────────────────────────── */
+
+@layer base {
+  :root {
+    /* Backgrounds */
+    --bg:          248 248 250;
+    --surface:     255 255 255;
+    --surface-2:   244 244 246;
+    --surface-3:   232 232 237;
+
+    /* Text */
+    --text:        17 17 19;
+    --text-2:      100 100 105;
+    --text-3:      170 170 175;
+
+    /* Accent */
+    --accent:      0 102 204;
+    --accent-soft: 0 102 204;
+
+    /* Semantic */
+    --green:       34 177 76;
+    --purple:      160 70 210;
+    --amber:       240 140 0;
+    --red:         220 50 40;
+
+    /* Borders */
+    --border:      218 218 224;
+    --border-soft: 234 234 238;
+
+    /* Radius */
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 16px;
+    --r-xl: 20px;
+    --r-2xl: 28px;
+
+    /* Shadows */
+    --shadow-xs: 0 1px 2px rgba(0,0,0,.05);
+    --shadow-sm: 0 1px 4px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+    --shadow-lg: 0 16px 40px rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.05);
+
+    /* Sidebar width */
+    --sidebar-w: 248px;
+
+    /* Tailwind compat */
+    --background: 248 248 250;
+    --foreground: 17 17 19;
+    --card: 255 255 255;
+    --card-foreground: 17 17 19;
+    --popover: 255 255 255;
+    --popover-foreground: 17 17 19;
+    --primary: 0 102 204;
+    --primary-foreground: 255 255 255;
+    --secondary: 244 244 246;
+    --secondary-foreground: 17 17 19;
+    --muted: 244 244 246;
+    --muted-foreground: 100 100 105;
+    --accent: 0 102 204;
+    --accent-foreground: 255 255 255;
+    --destructive: 220 50 40;
+    --destructive-foreground: 255 255 255;
+    --border: 218 218 224;
+    --input: 244 244 246;
+    --ring: 0 102 204;
+    --radius: 12px;
+  }
+
+  .dark {
+    --bg:          18 18 20;
+    --surface:     28 28 32;
+    --surface-2:   40 40 45;
+    --surface-3:   52 52 58;
+
+    --text:        242 242 245;
+    --text-2:      160 160 168;
+    --text-3:      90 90 98;
+
+    --accent:      30 140 255;
+
+    --border:      50 50 58;
+    --border-soft: 36 36 42;
+
+    --shadow-xs: 0 1px 2px rgba(0,0,0,.40);
+    --shadow-sm: 0 1px 4px rgba(0,0,0,.40);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.50);
+    --shadow-lg: 0 16px 40px rgba(0,0,0,.60);
+
+    --background: 18 18 20;
+    --foreground: 242 242 245;
+    --card: 28 28 32;
+    --card-foreground: 242 242 245;
+    --popover: 28 28 32;
+    --popover-foreground: 242 242 245;
+    --primary: 30 140 255;
+    --primary-foreground: 255 255 255;
+    --secondary: 40 40 45;
+    --secondary-foreground: 242 242 245;
+    --muted: 40 40 45;
+    --muted-foreground: 160 160 168;
+    --accent: 30 140 255;
+    --accent-foreground: 255 255 255;
+    --destructive: 255 70 60;
+    --destructive-foreground: 255 255 255;
+    --border: 50 50 58;
+    --input: 40 40 45;
+    --ring: 30 140 255;
+  }
+}
+
+/* ─── Base Resets ────────────────────────────────────────────────────────── */
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--text));
+    transition: background-color 0.2s ease, color 0.2s ease;
+    overflow: hidden;
+  }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(var(--border));
+    border-radius: 99px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--text-3)); }
+
+  ::selection {
+    background: rgba(var(--accent), 0.12);
+    color: rgb(var(--text));
+  }
+
+  :focus-visible {
+    outline: 2px solid rgba(var(--accent), 0.6);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  button { cursor: pointer; }
+  a, button { transition: opacity 0.15s ease; }
+}
+
+/* ─── Typography Scale ───────────────────────────────────────────────────── */
+
+@layer base {
+  .text-display {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+  }
+
+  .text-title-1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .text-title-2 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+
+  .text-title-3 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    line-height: 1.4;
+  }
+
+  .text-body {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  .text-body-sm {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .text-caption {
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    line-height: 1.4;
+  }
+
+  .text-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.4;
+  }
+}
+
+/* ─── Utility Classes ────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .surface   { background-color: rgb(var(--surface)); }
+  .surface-2 { background-color: rgb(var(--surface-2)); }
+
+  .glass {
+    background: rgba(var(--surface), 0.88);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+  }
+
+  /* Colored list icons */
+  .smart-list-today     { background: rgba(0,  102, 204, 0.10); color: rgb(0,  102, 204); }
+  .smart-list-upcoming  { background: rgba(160, 70, 210, 0.10); color: rgb(160,  70, 210); }
+  .smart-list-completed { background: rgba(34, 177,  76, 0.10); color: rgb(34,  177,  76); }
+  .smart-list-all       { background: rgba(100, 100, 105, 0.10); color: rgb(100, 100, 105); }
+  .smart-list-overdue   { background: rgba(220,  50,  40, 0.10); color: rgb(220,  50,  40); }
+
+  .dark .smart-list-today     { background: rgba(30, 140, 255, 0.14); color: rgb(30,  140, 255); }
+  .dark .smart-list-upcoming  { background: rgba(180,100,240, 0.14); color: rgb(180, 100, 240); }
+  .dark .smart-list-completed { background: rgba(40, 200,  90, 0.14); color: rgb(40,  200,  90); }
+  .dark .smart-list-all       { background: rgba(140,140,148, 0.14); color: rgb(140, 140, 148); }
+  .dark .smart-list-overdue   { background: rgba(255, 70,  60, 0.14); color: rgb(255,  70,  60); }
+
+  /* Priority strips */
+  .priority-low      { background: rgb(var(--green)); }
+  .priority-medium   { background: rgb(var(--amber)); }
+  .priority-high     { background: rgb(200, 80, 10); }
+  .priority-critical { background: rgb(var(--red)); }
+}
