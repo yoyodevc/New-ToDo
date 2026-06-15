@@ -7,7 +7,15 @@ import { useTaskCounts } from '@/store/use-task-counts';
 import { CompletionCircle } from '@/components/ui/completion-circle';
 import { Modal } from '@/components/ui/modal';
 import { TaskForm } from '@/features/tasks/task-form';
-import { CalendarDays, CalendarClock, CheckCircle2, AlertCircle, Plus, ArrowRight, Clock } from 'lucide-react';
+import {
+  Calendar,
+  CalendarRange,
+  CheckCircle,
+  AlertCircle,
+  Plus,
+  ArrowRight,
+  Clock,
+} from 'lucide-react';
 import { format, isSameDay } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -27,11 +35,11 @@ interface StatCardProps {
 }
 
 const cardConfig = {
-  'smart-list-today': { accent: '#3B82F6', iconBg: 'bg-blue-50 dark:bg-blue-950', iconColor: 'text-blue-600 dark:text-blue-300', sub: 'Due now', subColor: 'text-blue-500 dark:text-blue-400' },
-  'smart-list-upcoming': { accent: '#8B5CF6', iconBg: 'bg-violet-50 dark:bg-violet-950', iconColor: 'text-violet-600 dark:text-violet-300', sub: 'Next 7 days', subColor: 'text-violet-500 dark:text-violet-400' },
-  'smart-list-completed': { accent: '#10B981', iconBg: 'bg-emerald-50 dark:bg-emerald-950', iconColor: 'text-emerald-600 dark:text-emerald-300', sub: 'All time', subColor: 'text-emerald-500 dark:text-emerald-400' },
-  'smart-list-overdue': { accent: '#EF4444', iconBg: 'bg-red-50 dark:bg-red-950', iconColor: 'text-red-600 dark:text-red-300', sub: 'Needs attention', subColor: 'text-red-500 dark:text-red-400' },
-}
+  'smart-list-today': { accent: 'rgb(var(--accent))', sub: 'Due now' },
+  'smart-list-upcoming': { accent: 'rgb(var(--purple))', sub: '7 days' },
+  'smart-list-completed': { accent: 'rgb(var(--green))', sub: 'All time' },
+  'smart-list-overdue': { accent: 'rgb(var(--red))', sub: 'Attention' },
+};
 
 function StatCard({ label, count, icon: Icon, colorClass, filter }: StatCardProps) {
   const navigate = useNavigate();
@@ -40,37 +48,38 @@ function StatCard({ label, count, icon: Icon, colorClass, filter }: StatCardProp
   return (
     <button
       onClick={() => navigate(`/tasks?filter=${filter}`)}
-      className="group relative flex flex-col gap-2.5 overflow-hidden rounded-xl
-                 border border-black/[0.06] dark:border-white/[0.08]
-                 bg-white dark:bg-white/[0.04]
-                 px-4 py-3.5 text-left
-                 transition-all duration-150
-                 hover:-translate-y-px hover:border-black/10 dark:hover:border-white/12
-                 active:scale-[0.98] w-full"
+      className="group relative flex flex-col justify-between rounded-[16px]
+                 border border-[rgb(var(--border-soft))]
+                 bg-[rgb(var(--surface))]
+                 p-4 text-left h-[105px]
+                 transition-all duration-200 ease-out
+                 hover:border-[rgb(var(--accent))] hover:shadow-[0_4px_12px_rgba(0,102,204,0.06)]
+                 dark:hover:shadow-[0_4px_12px_rgba(0,102,204,0.15)]
+                 active:scale-[0.98] w-full cursor-pointer"
     >
-      {/* Left accent bar */}
-      <span
-        className="absolute inset-y-0 left-0 w-[3px] rounded-l-xl"
-        style={{ backgroundColor: cfg.accent }}
-      />
-
-      {/* Icon */}
-      <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${cfg.iconBg}`}>
-        <Icon className={`h-[17px] w-[17px] ${cfg.iconColor}`} strokeWidth={1.8} />
-      </span>
-
-      {/* Text */}
-      <div>
-        <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+      <div className="flex items-center justify-between w-full">
+        <span className="text-[12px] font-semibold text-[rgb(var(--text-2))]" style={{ letterSpacing: '-0.01em' }}>
           {label}
-        </p>
-        <p className="text-[28px] font-medium leading-none tabular-nums text-foreground">
-          {count}
-        </p>
+        </span>
+        <span
+          className="flex h-6 w-6 items-center justify-center rounded-md transition-colors duration-200"
+          style={{
+            backgroundColor: `${cfg.accent.replace(')', ', 0.12)')}`,
+            color: cfg.accent,
+          }}
+        >
+          <Icon className="h-3.5 w-3.5" strokeWidth={2.2} />
+        </span>
       </div>
 
-      {/* Sublabel */}
-      <p className={`text-xs ${cfg.subColor}`}>{cfg.sub}</p>
+      <div className="mt-2.5 flex items-baseline gap-1.5">
+        <span className="text-[26px] font-semibold leading-none tracking-tight tabular-nums text-[rgb(var(--text))]">
+          {count}
+        </span>
+        <span className="text-[10px] font-medium text-[rgb(var(--text-3))]" style={{ color: cfg.accent }}>
+          {cfg.sub}
+        </span>
+      </div>
     </button>
   );
 }
@@ -91,7 +100,7 @@ export function DashboardPage() {
         if (t.status === 'completed') return false;
         if (!t.dueDate) return false;
         const d = new Date(t.dueDate);
-        return d >= todayStart && d <= todayEnd;
+        return d <= todayEnd;
       })
       .slice(0, 6)
       .map((t) => ({ task: t, category: catMap.get(t.categoryId) }));
@@ -134,9 +143,9 @@ export function DashboardPage() {
         transition={{ duration: 0.3, delay: 0.06, ease: 'easeOut' }}
         className="grid grid-cols-2 gap-2.5 sm:grid-cols-4"
       >
-        <StatCard label="Today" count={counts.today} icon={CalendarDays} colorClass="smart-list-today" filter="today" />
-        <StatCard label="Upcoming" count={counts.upcoming} icon={CalendarClock} colorClass="smart-list-upcoming" filter="upcoming" />
-        <StatCard label="Completed" count={counts.completed} icon={CheckCircle2} colorClass="smart-list-completed" filter="completed" />
+        <StatCard label="Today" count={counts.today} icon={Calendar} colorClass="smart-list-today" filter="today" />
+        <StatCard label="Upcoming" count={counts.upcoming} icon={CalendarRange} colorClass="smart-list-upcoming" filter="upcoming" />
+        <StatCard label="Completed" count={counts.completed} icon={CheckCircle} colorClass="smart-list-completed" filter="completed" />
         <StatCard label="Overdue" count={counts.overdue} icon={AlertCircle} colorClass="smart-list-overdue" filter="overdue" />
       </motion.div>
 
@@ -217,13 +226,23 @@ export function DashboardPage() {
           </div>
         ) : (
           <div
-            className="rounded-2xl px-6 py-10 text-center"
+            className="rounded-2xl px-6 py-12 text-center border border-[rgb(var(--border-soft))] flex flex-col items-center justify-center"
             style={{ background: 'rgb(var(--surface))', boxShadow: 'var(--shadow-sm)' }}
           >
-            <p className="text-[15px] font-medium mb-1" style={{ color: 'rgb(var(--text))' }}>
-              Nothing due today
+            {/* Circular recess container with soft shadows */}
+            <div
+              className="mb-4 flex h-12 w-12 items-center justify-center rounded-full"
+              style={{
+                background: 'rgb(var(--surface-2))',
+                boxShadow: 'inset 1.5px 1.5px 4px rgba(0,0,0,0.04), inset -1.5px -1.5px 4px rgba(255,255,255,0.5), 1.5px 1.5px 6px rgba(0,0,0,0.01)',
+              }}
+            >
+              <CheckCircle size={20} strokeWidth={1.5} style={{ color: 'rgb(var(--accent))' }} />
+            </div>
+            <p className="text-[15px] font-semibold mb-1" style={{ color: 'rgb(var(--text))' }}>
+              All caught up
             </p>
-            <p className="text-[13px]" style={{ color: 'rgb(var(--text-2))' }}>
+            <p className="text-[13px] max-w-[240px] leading-relaxed" style={{ color: 'rgb(var(--text-2))' }}>
               Tasks with today's due date will appear here.
             </p>
           </div>

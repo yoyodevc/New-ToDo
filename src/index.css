@@ -235,17 +235,11 @@
   }
 
   /* Colored list icons */
-  .smart-list-today     { background: rgba(0,  102, 204, 0.10); color: rgb(0,  102, 204); }
-  .smart-list-upcoming  { background: rgba(160, 70, 210, 0.10); color: rgb(160,  70, 210); }
-  .smart-list-completed { background: rgba(34, 177,  76, 0.10); color: rgb(34,  177,  76); }
-  .smart-list-all       { background: rgba(100, 100, 105, 0.10); color: rgb(100, 100, 105); }
-  .smart-list-overdue   { background: rgba(220,  50,  40, 0.10); color: rgb(220,  50,  40); }
-
-  .dark .smart-list-today     { background: rgba(30, 140, 255, 0.14); color: rgb(30,  140, 255); }
-  .dark .smart-list-upcoming  { background: rgba(180,100,240, 0.14); color: rgb(180, 100, 240); }
-  .dark .smart-list-completed { background: rgba(40, 200,  90, 0.14); color: rgb(40,  200,  90); }
-  .dark .smart-list-all       { background: rgba(140,140,148, 0.14); color: rgb(140, 140, 148); }
-  .dark .smart-list-overdue   { background: rgba(255, 70,  60, 0.14); color: rgb(255,  70,  60); }
+  .smart-list-today     { background: rgba(var(--accent), 0.18); color: rgb(var(--accent)); }
+  .smart-list-upcoming  { background: rgba(var(--purple), 0.18); color: rgb(var(--purple)); }
+  .smart-list-completed { background: rgba(var(--green), 0.18); color: rgb(var(--green)); }
+  .smart-list-all       { background: rgba(var(--text-2), 0.18); color: rgb(var(--text)); }
+  .smart-list-overdue   { background: rgba(var(--red), 0.18); color: rgb(var(--red)); }
 
   /* Priority strips */
   .priority-low      { background: rgb(var(--green)); }

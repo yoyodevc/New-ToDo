@@ -274,46 +274,145 @@ export function DateTimePicker({ value, onChange, onUrgentChange, urgent = false
           </div>
 
           {hasTime && (
-            <div className="flex items-center justify-center gap-2 rounded-xl py-2 px-3" style={{ background: 'rgb(var(--surface-2))' }}>
-              <select
-                value={hour}
-                onChange={(e) => handleTime(e.target.value, minute, ampm)}
-                className="bg-transparent text-[13px] font-medium outline-none cursor-pointer"
-                style={{ color: 'rgb(var(--text))' }}
-              >
-                {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => (
-                  <option key={h} value={h}>{h}</option>
-                ))}
-              </select>
-              <span className="text-[13px] opacity-40">:</span>
-              <select
-                value={minute}
-                onChange={(e) => handleTime(hour, e.target.value, ampm)}
-                className="bg-transparent text-[13px] font-medium outline-none cursor-pointer"
-                style={{ color: 'rgb(var(--text))' }}
-              >
-                {Array.from({ length: 12 }, (_, i) => (i * 5).toString().padStart(2, '0')).map((m) => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </select>
-              <div
-                className="flex rounded-lg border overflow-hidden ml-1"
-                style={{ borderColor: 'rgb(var(--border-soft))' }}
-              >
-                {['AM', 'PM'].map((ap) => (
-                  <button
-                    key={ap}
-                    type="button"
-                    onClick={() => handleTime(hour, minute, ap)}
-                    className="px-2 py-0.5 text-[11px] font-semibold transition-colors"
-                    style={{
-                      background: ampm === ap ? 'rgb(var(--surface-3))' : 'transparent',
-                      color: ampm === ap ? 'rgb(var(--text))' : 'rgb(var(--text-3))',
+            <div className="space-y-2.5">
+              {/* Presets */}
+              <div className="grid grid-cols-4 gap-1.5">
+                {[
+                  { label: 'Morning', time: { h: '9', m: '00', ap: 'AM' } },
+                  { label: 'Afternoon', time: { h: '1', m: '00', ap: 'PM' } },
+                  { label: 'Evening', time: { h: '6', m: '00', ap: 'PM' } },
+                  { label: 'Night', time: { h: '9', m: '00', ap: 'PM' } },
+                ].map((preset) => {
+                  const active = hour === preset.time.h && minute === preset.time.m && ampm === preset.time.ap;
+                  return (
+                    <button
+                      key={preset.label}
+                      type="button"
+                      onClick={() => handleTime(preset.time.h, preset.time.m, preset.time.ap)}
+                      className={cn(
+                        "py-1 px-1.5 rounded-lg text-[10.5px] font-medium transition-all text-center",
+                        active
+                          ? "bg-[rgb(var(--accent))] text-white"
+                          : "bg-[rgb(var(--surface-2))] hover:bg-[rgb(var(--surface-3))] text-[rgb(var(--text-2))]"
+                      )}
+                    >
+                      <div className="font-semibold">{preset.label}</div>
+                      <div className="opacity-80 text-[9px] mt-0.5">{preset.time.h}:{preset.time.m} {preset.time.ap}</div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Custom inputs */}
+              <div className="flex items-center justify-center gap-2 rounded-xl py-2 px-3" style={{ background: 'rgb(var(--surface-2))' }}>
+                <div className="flex items-center gap-1">
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={hour}
+                    onChange={(e) => {
+                      let val = e.target.value.replace(/\D/g, '');
+                      if (val) {
+                        let num = parseInt(val);
+                        if (num > 12) num = 12;
+                        if (num < 1) num = 1;
+                        val = num.toString();
+                      }
+                      handleTime(val || '12', minute, ampm);
                     }}
-                  >
-                    {ap}
-                  </button>
-                ))}
+                    onBlur={() => {
+                      if (!hour) handleTime('12', minute, ampm);
+                    }}
+                    className="w-8 text-center bg-[rgb(var(--surface-3))] rounded px-1.5 py-1 text-[13px] font-semibold outline-none focus:ring-1 focus:ring-[rgb(var(--accent))]"
+                    style={{ color: 'rgb(var(--text))' }}
+                  />
+                  <div className="flex flex-col gap-0.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        let h = parseInt(hour) || 12;
+                        h = h === 12 ? 1 : h + 1;
+                        handleTime(h.toString(), minute, ampm);
+                      }}
+                      className="text-[9px] hover:bg-[rgb(var(--surface-3))] px-1 rounded leading-none"
+                    >▲</button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        let h = parseInt(hour) || 12;
+                        h = h === 1 ? 12 : h - 1;
+                        handleTime(h.toString(), minute, ampm);
+                      }}
+                      className="text-[9px] hover:bg-[rgb(var(--surface-3))] px-1 rounded leading-none"
+                    >▼</button>
+                  </div>
+                </div>
+
+                <span className="text-[13px] font-bold opacity-40">:</span>
+
+                <div className="flex items-center gap-1">
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={minute}
+                    onChange={(e) => {
+                      let val = e.target.value.replace(/\D/g, '');
+                      if (val) {
+                        let num = parseInt(val);
+                        if (num > 59) num = 59;
+                        val = num.toString().padStart(2, '0');
+                      }
+                      handleTime(hour, val || '00', ampm);
+                    }}
+                    onBlur={() => {
+                      if (!minute) handleTime(hour, '00', ampm);
+                    }}
+                    className="w-8 text-center bg-[rgb(var(--surface-3))] rounded px-1.5 py-1 text-[13px] font-semibold outline-none focus:ring-1 focus:ring-[rgb(var(--accent))]"
+                    style={{ color: 'rgb(var(--text))' }}
+                  />
+                  <div className="flex flex-col gap-0.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        let m = parseInt(minute) || 0;
+                        m = m >= 55 ? 0 : m + 5;
+                        handleTime(hour, m.toString().padStart(2, '0'), ampm);
+                      }}
+                      className="text-[9px] hover:bg-[rgb(var(--surface-3))] px-1 rounded leading-none"
+                    >▲</button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        let m = parseInt(minute) || 0;
+                        m = m <= 0 ? 55 : m - 5;
+                        handleTime(hour, m.toString().padStart(2, '0'), ampm);
+                      }}
+                      className="text-[9px] hover:bg-[rgb(var(--surface-3))] px-1 rounded leading-none"
+                    >▼</button>
+                  </div>
+                </div>
+
+                <div
+                  className="flex rounded-lg border overflow-hidden ml-2"
+                  style={{ borderColor: 'rgb(var(--border-soft))' }}
+                >
+                  {['AM', 'PM'].map((ap) => (
+                    <button
+                      key={ap}
+                      type="button"
+                      onClick={() => handleTime(hour, minute, ap)}
+                      className="px-2.5 py-1 text-[11px] font-bold transition-colors"
+                      style={{
+                        background: ampm === ap ? 'rgb(var(--surface-3))' : 'transparent',
+                        color: ampm === ap ? 'rgb(var(--text))' : 'rgb(var(--text-3))',
+                      }}
+                    >
+                      {ap}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           )}

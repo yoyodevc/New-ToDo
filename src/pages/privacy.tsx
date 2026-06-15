@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion';
-import { ShieldCheck, HardDrive, UserX, EyeOff, WifiOff } from 'lucide-react';
+import { ShieldCheck, HardDrive, UserX, EyeOff, WifiOff, User, Globe, Database } from 'lucide-react';
 
 const features = [
   {
     icon: HardDrive,
     title: 'Local-Only Storage',
     description:
-      "All tasks are stored exclusively in your browser's IndexedDB. Nothing is ever sent to any server \u2014 because there are no servers.",
+      "All tasks are stored exclusively in your browser's IndexedDB. Nothing is ever sent to any server — because there are no servers.",
   },
   {
     icon: UserX,
@@ -81,10 +81,10 @@ export function PrivacyPage() {
             className="flex flex-col items-center gap-2"
           >
             <div
-              className="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl"
-              style={{ background: 'rgb(var(--surface-2))' }}
+              className="h-14 w-14 rounded-2xl flex items-center justify-center"
+              style={{ background: 'rgb(var(--surface-2))', color: 'rgb(var(--text-2))' }}
             >
-              🧑‍💻
+              <User size={24} strokeWidth={1.5} />
             </div>
             <span className="text-[13px] font-semibold" style={{ color: 'rgb(var(--text))' }}>You</span>
           </motion.div>
@@ -98,7 +98,7 @@ export function PrivacyPage() {
             style={{ color: 'rgb(var(--text-3))' }}
           >
             <div className="hidden md:block h-px w-10 bg-current" />
-            <svg width="10" height="10" viewBox="0 0 10 10" className="rotate-0 md:rotate-0 rotate-90">
+            <svg width="10" height="10" viewBox="0 0 10 10" className="rotate-90 md:rotate-0">
               <path d="M0 5 L7 5 M5 2 L8 5 L5 8" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </motion.div>
@@ -111,10 +111,10 @@ export function PrivacyPage() {
             className="flex flex-col items-center gap-2"
           >
             <div
-              className="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl"
-              style={{ background: 'rgb(var(--surface-2))' }}
+              className="h-14 w-14 rounded-2xl flex items-center justify-center"
+              style={{ background: 'rgb(var(--surface-2))', color: 'rgb(var(--text-2))' }}
             >
-              🌐
+              <Globe size={24} strokeWidth={1.5} />
             </div>
             <span className="text-[13px] font-semibold" style={{ color: 'rgb(var(--text))' }}>Browser</span>
           </motion.div>
@@ -128,7 +128,7 @@ export function PrivacyPage() {
             style={{ color: 'rgb(var(--text-3))' }}
           >
             <div className="hidden md:block h-px w-10 bg-current" />
-            <svg width="10" height="10" viewBox="0 0 10 10">
+            <svg width="10" height="10" viewBox="0 0 10 10" className="rotate-90 md:rotate-0">
               <path d="M0 5 L7 5 M5 2 L8 5 L5 8" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </motion.div>
@@ -141,10 +141,10 @@ export function PrivacyPage() {
             className="flex flex-col items-center gap-2"
           >
             <div
-              className="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl"
-              style={{ background: 'rgba(var(--accent), 0.1)' }}
+              className="h-14 w-14 rounded-2xl flex items-center justify-center"
+              style={{ background: 'rgba(var(--accent), 0.1)', color: 'rgb(var(--accent))' }}
             >
-              💾
+              <Database size={24} strokeWidth={1.5} />
             </div>
             <span className="text-[13px] font-semibold" style={{ color: 'rgb(var(--text))' }}>IndexedDB</span>
           </motion.div>

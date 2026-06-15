@@ -15,19 +15,23 @@ interface TaskListProps {
 }
 
 function EmptyState({ message, subtext }: { message: string; subtext: string }) {
+  const displayMessage = message === "Nothing here yet" ? "All caught up" : message;
   return (
     <div className="flex flex-col items-center justify-center py-20 text-center select-none">
-      {/* Simple illustration */}
+      {/* Circular recess container with soft shadows */}
       <div
-        className="mb-5 flex h-16 w-16 items-center justify-center rounded-full"
-        style={{ background: 'rgb(var(--surface-2))' }}
+        className="mb-6 flex h-16 w-16 items-center justify-center rounded-full"
+        style={{
+          background: 'rgb(var(--surface-2))',
+          boxShadow: 'inset 1.5px 1.5px 4px rgba(0,0,0,0.04), inset -1.5px -1.5px 4px rgba(255,255,255,0.5), 1.5px 1.5px 6px rgba(0,0,0,0.01)',
+        }}
       >
-        <CheckCircle2 size={28} strokeWidth={1.5} style={{ color: 'rgb(var(--text-3))' }} />
+        <CheckCircle2 size={24} strokeWidth={1.5} style={{ color: 'rgb(var(--accent))' }} />
       </div>
-      <p className="text-[17px] font-semibold mb-1" style={{ color: 'rgb(var(--text))' }}>
-        {message}
+      <p className="text-[17px] font-semibold mb-1 tracking-tight" style={{ color: 'rgb(var(--text))' }}>
+        {displayMessage}
       </p>
-      <p className="text-[14px] max-w-[260px]" style={{ color: 'rgb(var(--text-2))' }}>
+      <p className="text-[13.5px] max-w-[280px] leading-relaxed" style={{ color: 'rgb(var(--text-2))' }}>
         {subtext}
       </p>
     </div>
@@ -70,7 +74,7 @@ export function TaskList({ filterStatus = 'all', searchQuery = '', smartFilter, 
       if (task.status === 'completed') return false;
       if (!task.dueDate) return false;
       const due = new Date(task.dueDate);
-      return due >= todayStart && due <= todayEnd && !isOverdue(task.dueDate);
+      return due <= todayEnd;
     }
     if (smartFilter === 'upcoming') {
       if (task.status === 'completed') return false;

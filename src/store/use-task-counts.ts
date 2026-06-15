@@ -21,6 +21,7 @@ export function useTaskCounts() {
       if (task.dueDate) {
         if (isOverdue(task.dueDate)) {
           overdue++;
+          today++;
         } else {
           const due = new Date(task.dueDate);
           if (due <= todayEnd) {
