@@ -59,7 +59,6 @@ export function TaskList({ filterStatus = 'all', searchQuery = '', smartFilter, 
   const { tasks, categories } = data;
   const now = new Date();
   const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
 
   // Apply smart filter + status filter + search
   const filtered = tasks.filter((task) => {

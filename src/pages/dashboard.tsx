@@ -93,7 +93,6 @@ export function DashboardPage() {
     const cats = await db.categories.toArray();
     const catMap = new Map(cats.map((c) => [c.id, c]));
     const now = new Date();
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
     const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
     return tasks
       .filter((t) => {

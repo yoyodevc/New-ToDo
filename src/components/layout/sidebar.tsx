@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
-  ShieldCheck,
   LayoutDashboard,
   Calendar,
   CalendarRange,
@@ -19,7 +18,6 @@ interface SmartListItemProps {
   count: number;
   icon: React.ElementType;
   onClick: () => void;
-  overdue?: boolean;
   color: string;
 }
 
@@ -28,7 +26,6 @@ function SmartListItem({
   count,
   icon: Icon,
   onClick,
-  overdue,
   color,
 }: SmartListItemProps) {
   return (
@@ -206,7 +203,6 @@ export function Sidebar() {
               count={counts.overdue}
               icon={AlertCircle}
               color="rgb(var(--red))"
-              overdue
               onClick={() => navigate('/tasks?filter=overdue')}
             />
           )}
